@@ -8,17 +8,20 @@
 
   <mat-tab-group>
     <mat-tab label="Lanches">
-        <div class="space-short"><mat-slide-toggle>X-Bacon - Bacon, hambúrguer de carne e queijo</mat-slide-toggle></div>
-        <div class="space-short"><mat-slide-toggle>X-Burger - Hambúrguer de carne e queijo</mat-slide-toggle></div>
-        <div class="space-short"><mat-slide-toggle>X-Egg - Ovo, hambúrguer de carne e queijo</mat-slide-toggle></div>
-        <div class="space-short"><mat-slide-toggle>X-Egg Bacon - Ovo, bacon, hambúrguer de carne e queijo</mat-slide-toggle></div>
+
+        <div class="space-short" *ngFor="let item of listLanches">
+            <mat-checkbox [checked]="item.checked" 
+                          (change)="onSelectItems(item, $event.checked)">{{item.name}} - {{item.descryption}}</mat-checkbox>
+        </div>
+
+        <button class="space-long" mat-raised-button color="primary" (click)="addLanchesChecked()">Adicionar ao Pedido</button>
     </mat-tab>
     <mat-tab label="Personalizar">
-        <div class="space-short"><mat-slide-toggle>Alface - R$ 0.40</mat-slide-toggle></div>
-        <div class="space-short"><mat-slide-toggle>Bacon - R$ 2,00</mat-slide-toggle></div>
-        <div class="space-short"><mat-slide-toggle>Hambúrguer de carne - R$ 3,00</mat-slide-toggle></div>
-        <div class="space-short"><mat-slide-toggle>Ovo - R$ 0,80</mat-slide-toggle></div>
-        <div class="space-short"><mat-slide-toggle>Queijo - R$ 1,50</mat-slide-toggle></div>
+        <div class="space-short"><mat-slide-toggle [checked]="personalizarAlfaceChecked">Alface - R$ 0.40</mat-slide-toggle></div>
+        <div class="space-short"><mat-slide-toggle [checked]="personalizarBaconChecked">Bacon - R$ 2,00</mat-slide-toggle></div>
+        <div class="space-short"><mat-slide-toggle [checked]="personalizarHamburguerCarneChecked">Hambúrguer de carne - R$ 3,00</mat-slide-toggle></div>
+        <div class="space-short"><mat-slide-toggle [checked]="personalizarOvoChecked">Ovo - R$ 0,80</mat-slide-toggle></div>
+        <div class="space-short"><mat-slide-toggle [checked]="personalizarQueijoChecked">Queijo - R$ 1,50</mat-slide-toggle></div>
     </mat-tab>
     <mat-tab label="Promoções"> 
         <mat-list>
@@ -31,7 +34,14 @@
 
   <div class="space-long"></div>
 
-  <mat-card>Total - R$0.00</mat-card>
+  Pedidos
+  <mat-list>
+    <mat-list-item *ngFor="let lanche of listaPedidos">
+      <h3 matLine> Num. Pedido: {{lanche.order}} - {{lanche.name}} </h3>
+    </mat-list-item>
+  </mat-list>
+
+  <mat-card>Total - R${{ totalLanches | number : '.2-2'}}</mat-card>
 </mat-card>
 
 <router-outlet></router-outlet>
