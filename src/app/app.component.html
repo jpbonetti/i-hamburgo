@@ -1,32 +1,31 @@
 <mat-card>
+
+  <div><i class="material-icons">fastfood</i></div>
   <mat-card-header>
-    <div><i class="material-icons">fastfood</i></div>
     <mat-card-title>{{menuName}}</mat-card-title>
     <mat-card-subtitle>{{menuDescryption}}}</mat-card-subtitle>
   </mat-card-header>
 
   <mat-tab-group>
-    <mat-tab label="Lanches">
+    <!-- Em desenvolvimento -->
+    <mat-tab [label]="tabHamburguerName">
         <div class="space-short" *ngFor="let item of listHamburguers">
-            <mat-checkbox [checked]="item.checked" 
-                          (change)="onSelectItems(item, $event.checked)">{{item.name}} - {{item.descryption}}</mat-checkbox>
+            <mat-checkbox (change)="onSelectItems(item, $event.checked)">{{labelHamburguerName}}: {{item.name}}, {{labelIngredientes}}: {{item.descryption}}, {{labelPrice}}: R${{ item.price | number : '.2-2'}}</mat-checkbox>
         </div>
 
         <button class="space-long" mat-raised-button color="primary" (click)="addHamburguersChecked()">{{buttonAddName}}</button>
     </mat-tab>
 
-    <mat-tab label="Personalizar">
+    <!-- Em desenvolvimento -->
+    <mat-tab [label]="tabCustomName">
         <div class="space-short" *ngFor="let item of listIngredients">
-            <mat-checkbox [checked]="item.checked" 
-                          (change)="onSelectIngredients(item, $event.checked)">{{item.name}} - {{item.price}}</mat-checkbox>
+            <mat-checkbox (change)="onSelectIngredients(item, $event.checked)">{{labelIngrediente}}: {{item.name}}, {{labelPrice}}: R${{ item.price | number : '.2-2'}}</mat-checkbox>
         </div>
-
-        <!-- Em desenvolvimento -->
 
         <button class="space-long" mat-raised-button color="primary" (click)="addCustomHamburguer()">{{buttonAddName}}</button>
     </mat-tab>
-    <mat-tab label="Promoções"> 
-      
+
+    <mat-tab [label]="tabPromotionName"> 
         <mat-list>
           <div class="space-short" *ngFor="let item of listPromotions">
               <mat-list-item>{{item.name}} - {{item.descryption}}</mat-list-item>
@@ -40,7 +39,7 @@
   <mat-card>
     <mat-card-header>
       <div><i class="material-icons">chrome_reader_mode</i></div>
-      <mat-card-title>Pedido</mat-card-title>
+      <mat-card-title>{{labelOrders}}</mat-card-title>
     </mat-card-header>
     
     <mat-divider></mat-divider>
@@ -54,7 +53,7 @@
     <mat-divider></mat-divider>
     
     <mat-card-header class="space-short">
-      <mat-card-title>Total - R${{ totalLanches | number : '.2-2'}}</mat-card-title>
+      <mat-card-title>{{labelValueOrder}} - {{ totalLanches | number : '.2-2'}}</mat-card-title>
     </mat-card-header>
   </mat-card>
 </mat-card>

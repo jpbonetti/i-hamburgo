@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { MatSlideToggleChange } from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +7,17 @@ import { MatSlideToggleChange } from '@angular/material';
 })
 export class AppComponent {
   totalLanches = 0;
+
+  labelHamburguerName = 'Nome';
+  labelOrders = 'Pedidos';
+  labelValueOrder = 'Total(R$)';
+  labelIngrediente = 'Ingrediente';
+  labelIngredientes = 'Ingredientes';
+  labelPrice = 'Preço';
+
+  tabHamburguerName = 'Lanches';
+  tabCustomName = 'Personalizar';
+  tabPromotionName = 'Promoções';
 
   menuName = 'Cardápio - I-Hamburgo';
   menuDescryption = 'Escolha suas opções, adicione ao pedido e tenha um ótimo apetite';
@@ -26,13 +36,7 @@ export class AppComponent {
       this.listHamburguersAdded.push(item);
     } else {
       if(this.listHamburguersAdded.length > 0) {
-        for (let i = 0; i < this.listHamburguersAdded.length; i++) {
-          const element = this.listHamburguersAdded[i];
-          if(item.id == element.id) {
-            this.listHamburguersAdded.splice(i, 1);
-            break;
-          }
-        }
+        this.removeItemList(this.listHamburguersAdded, item);
       }
     }
   }
@@ -42,13 +46,17 @@ export class AppComponent {
       this.listIngredientsAdded.push(item);
     } else {
       if(this.listIngredientsAdded.length > 0) {
-        for (let i = 0; i < this.listIngredientsAdded.length; i++) {
-          const element = this.listIngredientsAdded[i];
-          if(item.id == element.id) {
-            this.listIngredientsAdded.splice(i, 1);
-            break;
-          }
-        }
+        this.removeItemList(this.listIngredientsAdded, item);
+      }
+    }
+  }
+
+  removeItemList(listOrigin, objectToCompare) {
+    for (let i = 0; i < listOrigin.length; i++) {
+      const element = listOrigin[i];
+      if(objectToCompare.id == element.id) {
+        listOrigin.splice(i, 1);
+        break;
       }
     }
   }
@@ -63,33 +71,47 @@ export class AppComponent {
   }
 
   addCustomHamburguer() {
-    let descryption = '';
-    let price = 0;
-    
+    let price = this.createPriceOrder();
+
     if(this.listIngredientsAdded.length > 0) {
-      for (let index = 0; index < this.listIngredientsAdded.length; index++) {
-        const element = this.listIngredientsAdded[index];
-      
-        if(index == 0) {
-          descryption += element.name;
-        } else {
-          descryption += ', ' + element.name;
-        }
-        
-        price += element.price;
-      }
-
-      this.listOrders.push(
-        {
-          name : descryption,
-          type : 'Personalizado',
-          descryption : descryption,
-          price : price
-        }
-      );
-
+      this.listOrders.push(this.createOrder(this.createDescryptionOrder(), price));
       this.totalLanches += price;
     }
+  }
+
+  createPriceOrder() {
+    let price = 0;
+    for (let index = 0; index < this.listIngredientsAdded.length; index++) {
+      const element = this.listIngredientsAdded[index];
+      
+      price += element.price;
+    }
+
+    return price;
+  }
+
+  createDescryptionOrder() {
+    let descryption = '';
+    for (let index = 0; index < this.listIngredientsAdded.length; index++) {
+      const element = this.listIngredientsAdded[index];
+    
+      if(index == 0) {
+        descryption += element.name;
+      } else {
+        descryption += ', ' + element.name;
+      }
+    }
+
+    return descryption;
+  }
+
+  createOrder(descryption, price) {
+    return {
+      name : descryption,
+      type : 'Personalizado',
+      descryption : descryption,
+      price : price
+    };
   }
 
   createListOfHamburguers() {
