@@ -7,34 +7,29 @@ import { MatSlideToggleChange } from '@angular/material';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-
   totalLanches = 0;
-  listLanches = [
-    { id : 1, order : 0, name : 'X-Bacon', descryption: 'Bacon, hambúrguer de carne e queijo', checked : false, price : 6.50},
-    { id : 2, order : 0, name : 'X-Burger', descryption: 'Hambúrguer de carne e queijo', checked : false, price : 4.50},
-    { id : 3, order : 0, name : 'X-Egg', descryption: 'Ovo, hambúrguer de carne e queijo', checked : false , price : 5.30},
-    { id : 4, order : 0, name : 'Bacon', descryption: 'Ovo, bacon, hambúrguer de carne e queijo', checked : false, price : 7.30}
-  ];
 
-  listaPedidos = [];
+  menuName = 'Cardápio - I-Hamburgo';
+  menuDescryption = 'Escolha suas opções, adicione ao pedido e tenha um ótimo apetite';
 
-  listLanchesAdded = [];
+  buttonAddName = 'Adicionar ao Pedido';
 
-  personalizarAlfaceChecked = false;
-  personalizarBaconChecked = false;
-  personalizarHamburguerCarneChecked = false;
-  personalizarOvoChecked = false;
-  personalizarQueijoChecked = false;
+  listOrders = [];
+  listHamburguersAdded = [];
+  listIngredientsAdded = [];
+  listHamburguers = this.createListOfHamburguers();
+  listIngredients = this.createListIngredients();
+  listPromotions = this.createListPromotions();
 
   onSelectItems(item, itemChecked) {
     if(itemChecked) {
-      this.listLanchesAdded.push(item);
+      this.listHamburguersAdded.push(item);
     } else {
-      if(this.listLanchesAdded.length > 0) {
-        for (let i = 0; i < this.listLanchesAdded.length; i++) {
-          const element = this.listLanchesAdded[i];
+      if(this.listHamburguersAdded.length > 0) {
+        for (let i = 0; i < this.listHamburguersAdded.length; i++) {
+          const element = this.listHamburguersAdded[i];
           if(item.id == element.id) {
-            this.listLanchesAdded.splice(i, 1);
+            this.listHamburguersAdded.splice(i, 1);
             break;
           }
         }
@@ -42,13 +37,91 @@ export class AppComponent {
     }
   }
 
-  addLanchesChecked() {
-    if(this.listLanchesAdded.length > 0) {
-      
-      this.listLanchesAdded.forEach(element => { 
-        this.listaPedidos.push(element);
+  onSelectIngredients(item, itemChecked) {
+    if(itemChecked) {
+      this.listIngredientsAdded.push(item);
+    } else {
+      if(this.listIngredientsAdded.length > 0) {
+        for (let i = 0; i < this.listIngredientsAdded.length; i++) {
+          const element = this.listIngredientsAdded[i];
+          if(item.id == element.id) {
+            this.listIngredientsAdded.splice(i, 1);
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  addHamburguersChecked() {
+    if(this.listHamburguersAdded.length > 0) {
+      this.listHamburguersAdded.forEach(element => {
+        this.listOrders.push(element);
         this.totalLanches += element.price;
       });
     }
+  }
+
+  addCustomHamburguer() {
+    let descryption = '';
+    let price = 0;
+    
+    if(this.listIngredientsAdded.length > 0) {
+      for (let index = 0; index < this.listIngredientsAdded.length; index++) {
+        const element = this.listIngredientsAdded[index];
+      
+        if(index == 0) {
+          descryption += element.name;
+        } else {
+          descryption += ', ' + element.name;
+        }
+        
+        price += element.price;
+      }
+
+      this.listOrders.push(
+        {
+          name : descryption,
+          type : 'Personalizado',
+          descryption : descryption,
+          price : price
+        }
+      );
+
+      this.totalLanches += price;
+    }
+  }
+
+  createListOfHamburguers() {
+    let listHamburguers = [
+      { id : 1, name : 'X-Bacon', type: 'da Casa', descryption: 'Bacon, hambúrguer de carne e queijo', price : 6.50},
+      { id : 2, name : 'X-Burger', type: 'da Casa', descryption: 'Hambúrguer de carne e queijo', price : 4.50},
+      { id : 3, name : 'X-Egg', type: 'da Casa', descryption: 'Ovo, hambúrguer de carne e queijo', price : 5.30},
+      { id : 4, name : 'Bacon', type: 'da Casa', descryption: 'Ovo, bacon, hambúrguer de carne e queijo', price : 7.30}
+    ];
+
+    return listHamburguers;
+  }
+
+  createListIngredients() {
+    let listIngredients = [
+      { id : 1, name : 'Alface', price : 0.40 },
+      { id : 2, name : 'Bacon', price : 2.00 },
+      { id : 3, name : 'Hambúrguer de carne', price : 3.00 },
+      { id : 4, name : 'Ovo', price : 0.80 },
+      { id : 5, name : 'Queijo', price : 1.50 }
+    ];
+
+    return listIngredients;
+  }
+
+  createListPromotions() {
+    let listIngredients = [
+      { id : 1, name : 'Light', descryption : 'Se o lanche tem alface e não tem bacon, ganha 10% de desconto' },
+      { id : 2, name : 'Muita carne', descryption : 'A cada 3 porções de carne o cliente só paga 2. Se o lanche tiver 6 porções, ocliente pagará 4. Assim por diante...' },
+      { id : 3, name : 'Muito queijo', descryption : 'A cada 3 porções de queijo o cliente só paga 2. Se o lanche tiver 6 porções, ocliente pagará 4. Assim por diante...' }
+    ];
+
+    return listIngredients;
   }
 }

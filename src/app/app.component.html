@@ -1,47 +1,62 @@
 <mat-card>
-    
   <mat-card-header>
     <div><i class="material-icons">fastfood</i></div>
-    <mat-card-title>Cardápio I-Hamburgo</mat-card-title>
-    <mat-card-subtitle>Escolha ou personalize o seu lanche</mat-card-subtitle>
+    <mat-card-title>{{menuName}}</mat-card-title>
+    <mat-card-subtitle>{{menuDescryption}}}</mat-card-subtitle>
   </mat-card-header>
 
   <mat-tab-group>
     <mat-tab label="Lanches">
-
-        <div class="space-short" *ngFor="let item of listLanches">
+        <div class="space-short" *ngFor="let item of listHamburguers">
             <mat-checkbox [checked]="item.checked" 
                           (change)="onSelectItems(item, $event.checked)">{{item.name}} - {{item.descryption}}</mat-checkbox>
         </div>
 
-        <button class="space-long" mat-raised-button color="primary" (click)="addLanchesChecked()">Adicionar ao Pedido</button>
+        <button class="space-long" mat-raised-button color="primary" (click)="addHamburguersChecked()">{{buttonAddName}}</button>
     </mat-tab>
+
     <mat-tab label="Personalizar">
-        <div class="space-short"><mat-slide-toggle [checked]="personalizarAlfaceChecked">Alface - R$ 0.40</mat-slide-toggle></div>
-        <div class="space-short"><mat-slide-toggle [checked]="personalizarBaconChecked">Bacon - R$ 2,00</mat-slide-toggle></div>
-        <div class="space-short"><mat-slide-toggle [checked]="personalizarHamburguerCarneChecked">Hambúrguer de carne - R$ 3,00</mat-slide-toggle></div>
-        <div class="space-short"><mat-slide-toggle [checked]="personalizarOvoChecked">Ovo - R$ 0,80</mat-slide-toggle></div>
-        <div class="space-short"><mat-slide-toggle [checked]="personalizarQueijoChecked">Queijo - R$ 1,50</mat-slide-toggle></div>
+        <div class="space-short" *ngFor="let item of listIngredients">
+            <mat-checkbox [checked]="item.checked" 
+                          (change)="onSelectIngredients(item, $event.checked)">{{item.name}} - {{item.price}}</mat-checkbox>
+        </div>
+
+        <!-- Em desenvolvimento -->
+
+        <button class="space-long" mat-raised-button color="primary" (click)="addCustomHamburguer()">{{buttonAddName}}</button>
     </mat-tab>
     <mat-tab label="Promoções"> 
+      
         <mat-list>
-          <mat-list-item> Light - Se o lanche tem alface e não tem bacon, ganha 10% de desconto. </mat-list-item>
-          <mat-list-item> Muita carne - A cada 3 porções de carne o cliente só paga 2. Se o lanche tiver 6 porções, ocliente pagará 4. Assim por diante... </mat-list-item>
-          <mat-list-item> Muito queijo - A cada 3 porções de queijo o cliente só paga 2. Se o lanche tiver 6 porções, ocliente pagará 4. Assim por diante... </mat-list-item>
-        </mat-list>
+          <div class="space-short" *ngFor="let item of listPromotions">
+              <mat-list-item>{{item.name}} - {{item.descryption}}</mat-list-item>
+          </div>
+      </mat-list>
     </mat-tab>
   </mat-tab-group>
 
   <div class="space-long"></div>
 
-  Pedidos
-  <mat-list>
-    <mat-list-item *ngFor="let lanche of listaPedidos">
-      <h3 matLine> Num. Pedido: {{lanche.order}} - {{lanche.name}} </h3>
-    </mat-list-item>
-  </mat-list>
+  <mat-card>
+    <mat-card-header>
+      <div><i class="material-icons">chrome_reader_mode</i></div>
+      <mat-card-title>Pedido</mat-card-title>
+    </mat-card-header>
+    
+    <mat-divider></mat-divider>
 
-  <mat-card>Total - R${{ totalLanches | number : '.2-2'}}</mat-card>
+    <mat-list>
+      <mat-list-item *ngFor="let lanche of listOrders">
+        <h3 matLine> {{lanche.name}} - {{lanche.type}}</h3>
+      </mat-list-item>
+    </mat-list>
+
+    <mat-divider></mat-divider>
+    
+    <mat-card-header class="space-short">
+      <mat-card-title>Total - R${{ totalLanches | number : '.2-2'}}</mat-card-title>
+    </mat-card-header>
+  </mat-card>
 </mat-card>
 
 <router-outlet></router-outlet>
