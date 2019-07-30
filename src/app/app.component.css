@@ -6,7 +6,19 @@
     margin-top: 30px;
 }
 
-.example-button-row button,
-.example-button-row a {
-  margin-right: 8px;
+.select-margin-left {
+  margin-left: 1%;
+}
+
+.h4-inline {
+  display:inline;
+}
+
+.icon-remove-color { 
+  color: #ff6666; 
+}
+
+.icon-add-order-color { 
+  background-color: #4d94ff; 
+  color: white; 
 }
