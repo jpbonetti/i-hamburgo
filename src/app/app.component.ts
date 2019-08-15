@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { RestService } from './rest.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -6,6 +8,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  testes: any = [];
+  
   totalLanches = 0;
 
   labelHamburguerName = 'Nome';
@@ -32,9 +36,16 @@ export class AppComponent {
   listHamburguersAdded = [];
   listIngredientsAdded = [];
   listDefaultNumberLists = [0, 1, 2, 3, 4, 5];
-  listHamburguers = this.createListOfHamburguers();
+  listHamburguers = [];
   listIngredients = this.createListIngredients();
   listPromotions = this.createListPromotions();
+
+  constructor(public rest: RestService, private route: ActivatedRoute, private router: Router) {
+  }
+
+  ngOnInit() {
+    this.getHamburguers();
+  }
 
   onSelectNumberOfHamburguers(item, numberSelected) {
     this.listOrdersHamburguers = [];
@@ -242,5 +253,11 @@ export class AppComponent {
     });
 
     return ingredient;
+  }
+
+  getHamburguers() { 
+    this.rest.getProducts().subscribe((data: any[]) => {
+      this.listHamburguers = data;
+    });
   }
 }

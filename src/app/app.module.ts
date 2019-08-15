@@ -13,12 +13,26 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpModule }    from '@angular/http';
+import { RouterModule, Routes } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+
+const appRoutes: Routes = [
+  {
+    path: '',
+    component: AppComponent,
+    data: { title: 'Product List' }
+  }
+];
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
+    RouterModule.forRoot(appRoutes),
+    FormsModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -30,7 +44,9 @@ import { MatIconModule } from '@angular/material/icon';
     MatCheckboxModule,
     MatSelectModule,
     MatDividerModule,
-    MatIconModule
+    MatIconModule,
+    HttpClientModule, 
+    HttpModule
   ],
   providers: [],
   bootstrap: [AppComponent]
