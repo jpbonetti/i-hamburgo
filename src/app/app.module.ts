@@ -21,8 +21,7 @@ import { FormsModule } from '@angular/forms';
 const appRoutes: Routes = [
   {
     path: '',
-    component: AppComponent,
-    data: { title: 'Product List' }
+    component: AppComponent
   }
 ];
 

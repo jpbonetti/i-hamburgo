@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { RestService } from './rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Hamburguer } from './model/hamburguer.model';
+import { Ingredients } from './model/ingredients.model';
+import { Promotion } from './model/promotion.model';
 
 @Component({
   selector: 'app-root',
@@ -37,14 +40,16 @@ export class AppComponent {
   listIngredientsAdded = [];
   listDefaultNumberLists = [0, 1, 2, 3, 4, 5];
   listHamburguers = [];
-  listIngredients = this.createListIngredients();
-  listPromotions = this.createListPromotions();
+  listIngredients = []
+  listPromotions = []
 
-  constructor(public rest: RestService, private route: ActivatedRoute, private router: Router) {
+  constructor(public rest: RestService) {
   }
 
   ngOnInit() {
     this.getHamburguers();
+    this.getIngredients();
+    this.getPromotions();
   }
 
   onSelectNumberOfHamburguers(item, numberSelected) {
@@ -167,42 +172,6 @@ export class AppComponent {
     };
   }
 
-  createListOfHamburguers() {
-    const listHamburguers = [
-      { id : 1, name : 'X-Bacon', type: 'Padrão', descryption: 'Bacon, hambúrguer de carne e queijo', price : 6.50, number: 1 },
-      { id : 2, name : 'X-Burger', type: 'Padrão', descryption: 'Hambúrguer de carne e queijo', price : 4.50, number: 1 },
-      { id : 3, name : 'X-Egg', type: 'Padrão', descryption: 'Ovo, hambúrguer de carne e queijo', price : 5.30, number: 1 },
-      { id : 4, name : 'X-Egg Bacon', type: 'Padrão', descryption: 'Ovo, bacon, hambúrguer de carne e queijo',
-        price : 7.30, number: 1 }
-    ];
-
-    return listHamburguers;
-  }
-
-  createListIngredients() {
-    const listIngredients = [
-      { id : 1, name : 'Alface', price : 0.40, number: 1 },
-      { id : 2, name : 'Bacon', price : 2.00, number: 1 },
-      { id : 3, name : 'Hambúrguer de carne', price : 3.00, number: 1 },
-      { id : 4, name : 'Ovo', price : 0.80, number: 1 },
-      { id : 5, name : 'Queijo', price : 1.50, number: 1 }
-    ];
-
-    return listIngredients;
-  }
-
-  createListPromotions() {
-    const listIngredients = [
-      { id : 1, name : 'Light', descryption : 'Se o lanche tem alface e não tem bacon, ganha 10% de desconto' },
-      { id : 2, name : 'Muita carne', descryption : 'A cada 3 porções de carne o cliente só paga 2.' +
-        'Se o lanche tiver 6 porções, ocliente pagará 4. Assim por diante...' },
-      { id : 3, name : 'Muito queijo', descryption : 'A cada 3 porções de queijo o cliente só paga 2.' +
-        'Se o lanche tiver 6 porções, ocliente pagará 4. Assim por diante...' }
-    ];
-
-    return listIngredients;
-  }
-
   removeSelectedHamburguer(item) {
     this.listOrdersHamburguers.splice(this.getIndexList(this.listOrdersHamburguers, item), 1);
 
@@ -256,8 +225,20 @@ export class AppComponent {
   }
 
   getHamburguers() { 
-    this.rest.getProducts().subscribe((data: any[]) => {
+    this.rest.getHamburguers().subscribe((data: Hamburguer[]) => {
       this.listHamburguers = data;
+    });
+  }
+
+  getIngredients() { 
+    this.rest.getIngredients().subscribe((data: Ingredients[]) => {
+      this.listIngredients = data;
+    });
+  }
+
+  getPromotions() { 
+    this.rest.getPromotions().subscribe((data: Promotion[]) => {
+      this.listPromotions = data;
     });
   }
 }
