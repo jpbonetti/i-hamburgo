@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { RestService } from './rest.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Hamburguer } from './model/hamburguer.model';
 import { Ingredients } from './model/ingredients.model';
 import { Promotion } from './model/promotion.model';
+import { Order } from './model/order.model';
 
 @Component({
   selector: 'app-root',
@@ -11,8 +11,6 @@ import { Promotion } from './model/promotion.model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  testes: any = [];
-  
   totalLanches = 0;
 
   labelHamburguerName = 'Nome';
@@ -32,6 +30,7 @@ export class AppComponent {
   menuDescryption = 'Escolha suas opções, adicione ao pedido e tenha um ótimo apetite';
 
   buttonAddName = 'Adicionar ao Pedido';
+  buttonSaveName = 'Efetuar Pedido';
 
   listOrdersHamburguers = [];
   listOrdersCustomHamburguers = [];
@@ -40,8 +39,10 @@ export class AppComponent {
   listIngredientsAdded = [];
   listDefaultNumberLists = [0, 1, 2, 3, 4, 5];
   listHamburguers = [];
-  listIngredients = []
-  listPromotions = []
+  listIngredients = [];
+  listPromotions = [];
+
+  disabledButtonSaveOrder = true;
 
   constructor(public rest: RestService) {
   }
@@ -102,6 +103,8 @@ export class AppComponent {
         this.totalLanches += element.price;
       });
     }
+
+    this.disableSaveOrderButton();
   }
 
   addCustomHamburguer() {
@@ -111,6 +114,8 @@ export class AppComponent {
       this.listOrdersCustomHamburguers.push(order);
       this.totalLanches += order.price;
     }
+
+    this.disableSaveOrderButton();
   }
 
   createPriceOrder() {
@@ -165,7 +170,6 @@ export class AppComponent {
     return {
       id : this.listOrdersCustomHamburguers.length,
       name : descryptionOrigin,
-      type : 'Personalizado',
       descryption : descryptionOrigin,
       price : priceOrigin,
       ingredients : ingredientsOrigin
@@ -177,6 +181,8 @@ export class AppComponent {
 
     this.totalLanches = this.calculateValueOrder(this.listOrdersHamburguers);
     this.totalLanches += this.calculateValueOrder(this.listOrdersCustomHamburguers);
+
+    this.disableSaveOrderButton();
   }
 
   removeSelectedCustomHamburguer(item) {
@@ -184,6 +190,8 @@ export class AppComponent {
 
     this.totalLanches = this.calculateValueOrder(this.listOrdersHamburguers);
     this.totalLanches += this.calculateValueOrder(this.listOrdersCustomHamburguers);
+
+    this.disableSaveOrderButton();
   }
 
   getIndexList(list, item) {
@@ -240,5 +248,23 @@ export class AppComponent {
     this.rest.getPromotions().subscribe((data: Promotion[]) => {
       this.listPromotions = data;
     });
+  }
+
+  saveOrder() { 
+    let order = new Order();
+    order.id = 0;
+    order.hamburguers = this.listOrdersHamburguers;
+    order.customHamburguers = this.listOrdersCustomHamburguers;
+    
+    this.rest.saveOrder(order).subscribe((result) => {
+      window.alert(result);
+    });
+  }
+
+  disableSaveOrderButton() {
+    this.disabledButtonSaveOrder = true;
+    if (this.listOrdersHamburguers.length > 0 || this.listOrdersCustomHamburguers.length > 0) {
+      this.disabledButtonSaveOrder = false;
+    }
   }
 }

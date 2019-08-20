@@ -98,6 +98,8 @@
       <mat-card-title>{{labelValueOrder}} - {{ totalLanches | number : '.2-2'}}</mat-card-title>
     </mat-card-header>
   </mat-card>
+
+  <button class="space-long icon-add-order-color" mat-raised-button [disabled]="disabledButtonSaveOrder" (click)="saveOrder()">{{buttonSaveName}}</button>
 </mat-card>
 
-<router-outlet></router-outlet>
+<!-- <router-outlet></router-outlet> -->
