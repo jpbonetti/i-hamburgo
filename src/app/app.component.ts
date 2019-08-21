@@ -43,6 +43,10 @@ export class AppComponent {
   listPromotions = [];
 
   disabledButtonSaveOrder = true;
+  disabledPainelNewOrder = true;
+  showProgressBar = true;
+  servicesCalled = 0;
+  numberOfServices = 3;
 
   constructor(public rest: RestService) {
   }
@@ -235,18 +239,27 @@ export class AppComponent {
   getHamburguers() { 
     this.rest.getHamburguers().subscribe((data: Hamburguer[]) => {
       this.listHamburguers = data;
+
+      this.servicesCalled ++;
+      this.checkServicesCalled();
     });
   }
 
   getIngredients() { 
     this.rest.getIngredients().subscribe((data: Ingredients[]) => {
       this.listIngredients = data;
+
+      this.servicesCalled ++;
+      this.checkServicesCalled();
     });
   }
 
   getPromotions() { 
     this.rest.getPromotions().subscribe((data: Promotion[]) => {
       this.listPromotions = data;
+
+      this.servicesCalled ++;
+      this.checkServicesCalled();
     });
   }
 
@@ -265,6 +278,12 @@ export class AppComponent {
     this.disabledButtonSaveOrder = true;
     if (this.listOrdersHamburguers.length > 0 || this.listOrdersCustomHamburguers.length > 0) {
       this.disabledButtonSaveOrder = false;
+    }
+  }
+
+  checkServicesCalled() {
+    if(this.servicesCalled == this.numberOfServices) {
+      this.showProgressBar = false;
     }
   }
 }

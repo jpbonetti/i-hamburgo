@@ -1,105 +1,103 @@
+<mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+
 <mat-card>
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title><i class="material-icons">fastfood</i> {{menuName}}</mat-card-title>
-      <mat-card-subtitle>{{menuDescryption}}</mat-card-subtitle>
-    </mat-card-header>
-  </mat-card>
+  <mat-card-header>
+    <mat-card-title><i class="material-icons">fastfood</i> {{menuName}}</mat-card-title>
+    <mat-card-subtitle>{{menuDescryption}}</mat-card-subtitle>
+  </mat-card-header>
+</mat-card>
 
-  <div class="space-short"></div>
+<div class="space-short"></div>
 
-  <mat-card>
-    <mat-tab-group>
-      <mat-tab [label]="tabHamburguerName">
-          <div class="space-short" *ngFor="let item of listHamburguers">
-              <div>
-                <h4 class="h4-inline">{{labelHamburguerName}}:</h4> {{item.name}}, 
-                <h4 class="h4-inline">{{labelIngredientes}}:</h4> {{item.descryption}}, 
-                <h4 class="h4-inline">{{labelPrice}}:</h4> R${{ item.price | number : '.2-2'}}
+<mat-card>
+  <mat-tab-group>
+    <mat-tab [label]="tabHamburguerName">
+        <div class="space-short" *ngFor="let item of listHamburguers">
+            <div>
+              <h4 class="h4-inline">{{labelHamburguerName}}:</h4> {{item.name}}, 
+              <h4 class="h4-inline">{{labelIngredientes}}:</h4> {{item.descryption}}, 
+              <h4 class="h4-inline">{{labelPrice}}:</h4> R${{ item.price | number : '.2-2'}}
+
+              <mat-form-field class="select-margin-left">
+                <mat-label>{{labelNumber}}</mat-label>
+                <mat-select (valueChange)="onSelectNumberOfHamburguers(item, $event)">
+                  <mat-option *ngFor="let number of listDefaultNumberLists" [value]="number">
+                    {{number}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+        </div>
+
+        <button class="space-long icon-add-order-color" mat-raised-button (click)="addHamburguersChecked()">{{buttonAddName}}</button>
+    </mat-tab>
+
+    <mat-tab [label]="tabCustomName">
+        <div class="space-short" *ngFor="let item of listIngredients">
+            <div>
+                <h4 class="h4-inline">{{labelIngrediente}}: </h4> {{item.name}}, 
+                <h4 class="h4-inline">{{labelPrice}}: </h4> R${{ item.price | number : '.2-2'}}
 
                 <mat-form-field class="select-margin-left">
-                  <mat-label>{{labelNumber}}</mat-label>
-                  <mat-select (valueChange)="onSelectNumberOfHamburguers(item, $event)">
-                    <mat-option *ngFor="let number of listDefaultNumberLists" [value]="number">
-                      {{number}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
+                    <mat-label>{{labelNumber}}</mat-label>
+                    <mat-select (valueChange)="onSelectIngredients(item, $event)">
+                      <mat-option *ngFor="let number of listDefaultNumberLists" [value]="number">
+                        {{number}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
             </div>
+        </div>
+
+        <button class="space-long icon-add-order-color" mat-raised-button (click)="addCustomHamburguer()">{{buttonAddName}}</button>
+    </mat-tab>
+
+    <mat-tab [label]="tabPromotionName"> 
+        <mat-list>
+          <div class="space-short" *ngFor="let item of listPromotions">
+              <mat-list-item><h4 class="h4-inline">{{item.name}}</h4> - {{item.descryption}}</mat-list-item>
           </div>
+      </mat-list>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>
 
-          <button class="space-long icon-add-order-color" mat-raised-button (click)="addHamburguersChecked()">{{buttonAddName}}</button>
-      </mat-tab>
+<div class="space-short"></div>
+      
+<mat-card>
+  <mat-card-header>
+    <mat-card-title><i class="material-icons">chrome_reader_mode</i> {{labelOrders}}</mat-card-title>
+  </mat-card-header>
+  
+  <mat-divider></mat-divider>
 
-      <mat-tab [label]="tabCustomName">
-          <div class="space-short" *ngFor="let item of listIngredients">
-              <div>
-                  <h4 class="h4-inline">{{labelIngrediente}}: </h4> {{item.name}}, 
-                  <h4 class="h4-inline">{{labelPrice}}: </h4> R${{ item.price | number : '.2-2'}}
+  <h4>{{tabHamburguerName}}</h4>
+  <mat-nav-list>
+    <mat-list-item *ngFor="let lanche of listOrdersHamburguers">
+        <a matLine>{{labelHamburguerName}}: {{lanche.name}}, {{labelNumber}}: {{lanche.number}}</a>
+        <button mat-icon-button (click)="removeSelectedHamburguer(lanche)">
+          <mat-icon class="icon-remove-color">remove_circle</mat-icon>
+        </button>
+    </mat-list-item>
+  </mat-nav-list>
 
-                  <mat-form-field class="select-margin-left">
-                      <mat-label>{{labelNumber}}</mat-label>
-                      <mat-select (valueChange)="onSelectIngredients(item, $event)">
-                        <mat-option *ngFor="let number of listDefaultNumberLists" [value]="number">
-                          {{number}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-              </div>
-          </div>
+  <h4>{{labelCustomHamburguers}}</h4>
+  <mat-nav-list>
+    <mat-list-item *ngFor="let customHamburguer of listOrdersCustomHamburguers">
+        <a matLine>{{customHamburguer.name}}</a>
+        <button mat-icon-button (click)="removeSelectedCustomHamburguer(customHamburguer)">
+          <mat-icon class="icon-remove-color">remove_circle</mat-icon>
+        </button>
+    </mat-list-item>
+  </mat-nav-list>
 
-          <button class="space-long icon-add-order-color" mat-raised-button (click)="addCustomHamburguer()">{{buttonAddName}}</button>
-      </mat-tab>
+  <mat-divider></mat-divider>
+  
+  <div class="space-long"></div>
 
-      <mat-tab [label]="tabPromotionName"> 
-          <mat-list>
-            <div class="space-short" *ngFor="let item of listPromotions">
-                <mat-list-item><h4 class="h4-inline">{{item.name}}</h4> - {{item.descryption}}</mat-list-item>
-            </div>
-        </mat-list>
-      </mat-tab>
-    </mat-tab-group>
-  </mat-card>
-
-  <div class="space-short"></div>
-        
-  <mat-card>
-    <mat-card-header>
-      <div><i class="material-icons">chrome_reader_mode</i></div>
-      <mat-card-title>{{labelOrders}}</mat-card-title>
-    </mat-card-header>
-    
-    <mat-divider></mat-divider>
-
-    <h4>{{tabHamburguerName}}</h4>
-    <mat-nav-list>
-      <mat-list-item *ngFor="let lanche of listOrdersHamburguers">
-          <a matLine>{{labelHamburguerName}}: {{lanche.name}}, {{labelNumber}}: {{lanche.number}}</a>
-          <button mat-icon-button (click)="removeSelectedHamburguer(lanche)">
-            <mat-icon class="icon-remove-color">remove_circle</mat-icon>
-          </button>
-      </mat-list-item>
-    </mat-nav-list>
-
-    <h4>{{labelCustomHamburguers}}</h4>
-
-    <mat-nav-list>
-      <mat-list-item *ngFor="let customHamburguer of listOrdersCustomHamburguers">
-          <a matLine>{{customHamburguer.name}}</a>
-          <button mat-icon-button (click)="removeSelectedCustomHamburguer(customHamburguer)">
-            <mat-icon class="icon-remove-color">remove_circle</mat-icon>
-          </button>
-      </mat-list-item>
-    </mat-nav-list>
-
-    <mat-divider></mat-divider>
-    
-    <mat-card-header class="space-short">
-      <mat-card-title>{{labelValueOrder}} - {{ totalLanches | number : '.2-2'}}</mat-card-title>
-    </mat-card-header>
-  </mat-card>
+  <mat-card-header>
+    <mat-card-title>{{labelValueOrder}} - {{ totalLanches | number : '.2-2'}}</mat-card-title>
+  </mat-card-header>
 
   <button class="space-long icon-add-order-color" mat-raised-button [disabled]="disabledButtonSaveOrder" (click)="saveOrder()">{{buttonSaveName}}</button>
 </mat-card>
-
-<!-- <router-outlet></router-outlet> -->

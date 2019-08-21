@@ -17,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpModule }    from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 const appRoutes: Routes = [
   {
@@ -45,7 +46,8 @@ const appRoutes: Routes = [
     MatDividerModule,
     MatIconModule,
     HttpClientModule, 
-    HttpModule
+    HttpModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
