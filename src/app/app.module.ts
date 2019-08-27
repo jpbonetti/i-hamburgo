@@ -18,6 +18,8 @@ import { HttpModule }    from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatBadgeModule } from '@angular/material/badge';
 
 const appRoutes: Routes = [
   {
@@ -47,7 +49,9 @@ const appRoutes: Routes = [
     MatIconModule,
     HttpClientModule, 
     HttpModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatExpansionModule,
+    MatBadgeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

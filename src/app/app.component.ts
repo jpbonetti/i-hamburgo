@@ -13,9 +13,11 @@ import { Order } from './model/order.model';
 export class AppComponent {
   totalLanches = 0;
 
+  moneySymbol = 'R$';
+
   labelHamburguerName = 'Nome';
   labelOrders = 'Pedido';
-  labelValueOrder = 'Total(R$)';
+  labelValueOrder = 'Total';
   labelIngrediente = 'Ingrediente';
   labelIngredientes = 'Ingredientes';
   labelPrice = 'Preço';
@@ -23,6 +25,7 @@ export class AppComponent {
   labelCustomHamburguers = 'Personalizados';
 
   tabHamburguerName = 'Lanches';
+  tabHamburguerDescryption = 'Escolha seu lanche ou customize a sua maneira';
   tabCustomName = 'Personalizar';
   tabPromotionName = 'Promoções';
 
@@ -46,7 +49,8 @@ export class AppComponent {
   disabledPainelNewOrder = true;
   showProgressBar = true;
   servicesCalled = 0;
-  numberOfServices = 3;
+
+  numberOfCustomAndHamburguers = 0;
 
   constructor(public rest: RestService) {
   }
@@ -109,6 +113,7 @@ export class AppComponent {
     }
 
     this.disableSaveOrderButton();
+    this.updateBadgeIconNumberOfHamburguers();
   }
 
   addCustomHamburguer() {
@@ -120,6 +125,7 @@ export class AppComponent {
     }
 
     this.disableSaveOrderButton();
+    this.updateBadgeIconNumberOfHamburguers();
   }
 
   createPriceOrder() {
@@ -187,6 +193,7 @@ export class AppComponent {
     this.totalLanches += this.calculateValueOrder(this.listOrdersCustomHamburguers);
 
     this.disableSaveOrderButton();
+    this.updateBadgeIconNumberOfHamburguers();
   }
 
   removeSelectedCustomHamburguer(item) {
@@ -196,6 +203,7 @@ export class AppComponent {
     this.totalLanches += this.calculateValueOrder(this.listOrdersCustomHamburguers);
 
     this.disableSaveOrderButton();
+    this.updateBadgeIconNumberOfHamburguers();
   }
 
   getIndexList(list, item) {
@@ -241,7 +249,7 @@ export class AppComponent {
       this.listHamburguers = data;
 
       this.servicesCalled ++;
-      this.checkServicesCalled();
+      this.checkServicesCalled(3);
     });
   }
 
@@ -250,7 +258,7 @@ export class AppComponent {
       this.listIngredients = data;
 
       this.servicesCalled ++;
-      this.checkServicesCalled();
+      this.checkServicesCalled(3);
     });
   }
 
@@ -259,18 +267,22 @@ export class AppComponent {
       this.listPromotions = data;
 
       this.servicesCalled ++;
-      this.checkServicesCalled();
+      this.checkServicesCalled(3);
     });
   }
 
   saveOrder() { 
+    this.showProgressBar = true;
+
     let order = new Order();
     order.id = 0;
     order.hamburguers = this.listOrdersHamburguers;
     order.customHamburguers = this.listOrdersCustomHamburguers;
     
     this.rest.saveOrder(order).subscribe((result) => {
-      window.alert(result);
+      
+
+      this.checkServicesCalled(1);
     });
   }
 
@@ -281,9 +293,17 @@ export class AppComponent {
     }
   }
 
-  checkServicesCalled() {
-    if(this.servicesCalled == this.numberOfServices) {
+  checkServicesCalled(numberOfServices) {
+    if(this.servicesCalled == numberOfServices) {
       this.showProgressBar = false;
     }
+  }
+
+  updateBadgeIconNumberOfHamburguers() {
+    this.numberOfCustomAndHamburguers = this.listOrdersCustomHamburguers.length;
+
+    this.listOrdersHamburguers.forEach(element => {
+      this.numberOfCustomAndHamburguers += element.number;
+    });
   }
 }
